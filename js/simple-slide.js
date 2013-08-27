@@ -17,7 +17,13 @@ $(document).ready(function() {
         simple_slide.slider[index].wrap.height(simple_slide.slider[index].height) .width(simple_slide.slider[index].width) .css({'position':'relative','overflow':'hidden'});
         
         simple_slide.slider[index].slides.each( function(slide_index) {
-            $(this).css({'z-index':simple_slide.slider[index].nb_of_slides - slide_index,'position':'absolute'});
+            $(this).css({
+                'z-index':simple_slide.slider[index].nb_of_slides - slide_index,
+                'position':'absolute',
+                'left': simple_slide.slider[index].width + 'px'
+            });
+            if(slide_index == 0)
+                $(this).css({'left':'0'});
         });
 
 
@@ -25,15 +31,30 @@ $(document).ready(function() {
         {
             if(simple_slide.slider[index].index == simple_slide.slider[index].nb_of_slides-1)
             {
-                simple_slide.slider[index].slides.eq(0).css({'left':'0','z-index':'0'});
+                simple_slide.slider[index].slides.eq(0).css({'left':simple_slide.slider[index].width+'px','z-index':'0'});
             }
             if(simple_slide.slider[index].index == simple_slide.slider[index].nb_of_slides)
             {
                 simple_slide.slider[index].index = 0;
-                simple_slide.slider[index].slides.css('left','0');
+                simple_slide.slider[index].slides.each( function(slide_index) {
+                    $(this).css({
+                        'z-index':simple_slide.slider[index].nb_of_slides - slide_index,
+                        'left': simple_slide.slider[index].width + 'px'
+                    });
+                    if(slide_index == 0)
+                    $(this).css({'left':'0'});
+                });
                 simple_slide.slider[index].slides.eq(simple_slide.slider[index].index).css('z-index', simple_slide.slider[index].nb_of_slides);
             }
             simple_slide.slider[index].slides.eq(simple_slide.slider[index].index).animate({"left":"-="+simple_slide.slider[index].width+"px"},"slow");
+            if(simple_slide.slider[index].index == simple_slide.slider[index].nb_of_slides-1)
+            {
+                simple_slide.slider[index].slides.eq(0).animate({"left":"-="+simple_slide.slider[index].width+"px"},"slow");
+            }
+            else
+            {
+                simple_slide.slider[index].slides.eq(simple_slide.slider[index].index+1).animate({"left":"-="+simple_slide.slider[index].width+"px"},"slow");
+            }
             simple_slide.slider[index].index ++;
         }
 
@@ -42,12 +63,10 @@ $(document).ready(function() {
             if(simple_slide.slider[index].index == simple_slide.slider[index].nb_of_slides)
             {
                 simple_slide.slider[index].slides.css({'left':'-'+simple_slide.slider[index].width+"px"});
-                simple_slide.slider[index].slides.eq(simple_slide.slider[index].index).css('left','0');
-                simple_slide.slider[index].slides.eq(0).css({'left':'0','z-index':'0'});
+                simple_slide.slider[index].slides.eq(0).css({'left':simple_slide.slider[index].width+'px'});
             }
             if(simple_slide.slider[index].index == 1)
             {
-                simple_slide.slider[index].slides.eq(0).css('z-index', simple_slide.slider[index].nb_of_slides);
                 simple_slide.slider[index].slides.eq(0).css({'left':'-'+simple_slide.slider[index].width+"px"});
             }
             if(simple_slide.slider[index].index == 0)
@@ -56,6 +75,10 @@ $(document).ready(function() {
                 simple_slide.slider[index].slides.eq(simple_slide.slider[index].index).css({'left':'0','z-index':'0'});
                 simple_slide.slider[index].index = simple_slide.slider[index].slides.length;
             }
+            if(simple_slide.slider[index].index == simple_slide.slider[index].nb_of_slides)
+                simple_slide.slider[index].slides.eq(0).animate({"left":"+="+simple_slide.slider[index].width+"px"},"slow");
+            else
+                simple_slide.slider[index].slides.eq(simple_slide.slider[index].index).animate({"left":"+="+simple_slide.slider[index].width+"px"},"slow");
             simple_slide.slider[index].index --;
             simple_slide.slider[index].slides.eq(simple_slide.slider[index].index).animate({"left":"+="+simple_slide.slider[index].width+"px"},"slow");
         }
@@ -97,8 +120,5 @@ $(document).ready(function() {
 
     });
     
-
-
-
 
 });
