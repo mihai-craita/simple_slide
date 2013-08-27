@@ -2,7 +2,7 @@ var simple_slide = {};
 $(document).ready(function() {
         simple_slide.slider = $('.slider');
         simple_slide.default_delay = 2000;
-        simple_slide.stop_on_mouse_over = true;
+        simple_slide.stop_on_mouse_over = false;
         simple_slide.slider.each( function ( index )
             {
                 simple_slide.slider[index].slides = $(this).find('.slide'); 
@@ -12,10 +12,13 @@ $(document).ready(function() {
                 simple_slide.slider[index].index = 0;
                 simple_slide.slider[index].delay = simple_slide.default_delay;
                 simple_slide.slider[index].slides.wrapAll('<div class="slideWrap" />');
-                if(simple_slide.stop_on_mouse_over)
+                if(simple_slide.stop_on_mouse_over && simple_slide.slider[index].delay > 0)
                 {
                     simple_slide.slider[index].slides.on('mouseenter', function() {simple_slide.slider[index].stop()});
-                    simple_slide.slider[index].slides.on('mouseleave', function() {simple_slide.slider[index].next()});
+                    simple_slide.slider[index].slides.on('mouseleave', function() {
+                            simple_slide.slider[index].timer = setInterval( function() { simple_slide.slider[index].next() }
+                              ,simple_slide.slider[index].delay/2 );
+                    });
                 }
 
                 simple_slide.slider[index].wrap = $(this).find('.slideWrap');
