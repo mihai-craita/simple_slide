@@ -1,6 +1,7 @@
     var simple_slide = {};
 $(document).ready(function() {
     simple_slide.slider = $('.slider');
+    simple_slide.default_delay = 2000;
     simple_slide.slider.each( function ( index )
     {
         simple_slide.slider[index].slides = $(this).find('.slide'); 
@@ -8,7 +9,7 @@ $(document).ready(function() {
         simple_slide.slider[index].width = simple_slide.slider[index].slides.width();
         simple_slide.slider[index].height = simple_slide.slider[index].slides.height();
         simple_slide.slider[index].index = 0;
-        simple_slide.slider[index].delay = 2000;
+        simple_slide.slider[index].delay = simple_slide.default_delay;
         simple_slide.slider[index].slides.wrapAll('<div class="slideWrap" />');
 
         simple_slide.slider[index].wrap = $(this).find('.slideWrap');
@@ -61,19 +62,37 @@ $(document).ready(function() {
 
         simple_slide.slider[index].previous = function()
         {
-            clearInterval(simple_slide.slider[index].timer);
-            simple_slide.slider[index].previous_slide();
-            simple_slide.slider[index].timer = setInterval( function() { simple_slide.slider[index].next() },simple_slide.slider[index].delay );
+            if(event)
+                event.preventDefault();
+            if(simple_slide.slider[index].delay > 0)
+            {
+                clearInterval(simple_slide.slider[index].timer);
+                simple_slide.slider[index].previous_slide();
+                simple_slide.slider[index].timer = setInterval( function() { simple_slide.slider[index].next() },simple_slide.slider[index].delay );
+            }
+            else
+            {
+                simple_slide.slider[index].previous_slide();
+            }
         }
 
         simple_slide.slider[index].next = function()
         {
-            clearInterval(simple_slide.slider[index].timer);
-            simple_slide.slider[index].next_slide();
-            simple_slide.slider[index].timer = setInterval( function() { simple_slide.slider[index].next() },simple_slide.slider[index].delay );
+            if(event)
+                event.preventDefault();
+            if(simple_slide.slider[index].delay > 0)
+            {
+                clearInterval(simple_slide.slider[index].timer);
+                simple_slide.slider[index].next_slide();
+                simple_slide.slider[index].timer = setInterval( function() { simple_slide.slider[index].next() },simple_slide.slider[index].delay );
+            }
+            else
+            {
+                simple_slide.slider[index].next_slide();
+            }
         }
 
-        if(simple_slide.slider[index].nb_of_slides > 1)
+        if(simple_slide.slider[index].nb_of_slides > 1 && simple_slide.slider[index].delay > 0)
             simple_slide.slider[index].timer = setInterval( function() { simple_slide.slider[index].next() },simple_slide.slider[index].delay );
 
     });
